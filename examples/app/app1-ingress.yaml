@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: app1-ingress
+  annotations:
+   kubernetes.io/ingress.class: "redcitrix"
+   ingress.citrix.com/insecure-port: "80"
+   ingress.citrix.com/frontend-ip: "10.106.175.66"
+   ingress.citrix.com/analyticsprofile: '{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED", "httphost":"ENABLED", "httpmethod":"ENABLED", "httpcontenttype":"ENABLED"}, "tcpinsight": {"tcpBurstReporting":"DISABLED"}}'
+spec:
+  rules:
+  - host: app1.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: app1
+          servicePort: 80
