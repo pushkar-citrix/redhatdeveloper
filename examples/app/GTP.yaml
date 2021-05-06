@@ -1,0 +1,25 @@
+apiVersion: "citrix.com/v1beta1"
+kind: globaltrafficpolicy
+metadata:
+  name: app1
+  namespace: default
+spec:
+  serviceType: 'HTTP'
+  hosts:
+  - host: 'app1.example.com'
+    policy:
+      #trafficPolicy: 'ROUNDROBIN'
+      trafficPolicy: 'FAILOVER'
+      secLbMethod: 'ROUNDROBIN'
+      targets:
+      - destination: 'app1.default.east.openshift'
+        weight: 1
+      - destination: 'app1.redhat.north.openshift4'
+        weight: 1 
+        primary: false
+      monitor:
+      - monType: http
+        uri: ''
+        respCode: 200
+  status:
+    {}
