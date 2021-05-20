@@ -1,18 +1,44 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: app1-ingress
-  annotations: 
-   kubernetes.io/ingress.class: "redcitrix"
-   ingress.citrix.com/insecure-port: "80"
-   ingress.citrix.com/frontend-ip: "10.106.175.66"
-   ingress.citrix.com/analyticsprofile: '{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED", "httphost":"ENABLED", "httpmethod":"ENABLED", "httpcontenttype":"ENABLED"}, "tcpinsight": {"tcpBurstReporting":"DISABLED"}}'
+  name: app1
+  labels:
+      name: app1
 spec:
-  rules:
-  - host: app1.example.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: app1
-          servicePort: 80
+  selector:
+    matchLabels:
+      name: app1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: app1
+        # abc: def
+    spec:
+      containers:
+      - name: app3
+        # image: in-docker-reg.eng.citrite.net/cpx-dev/web-test:latest
+#        image: httpd:2.4
+#        image: docker.io/kumhn/sample-app:eastdc
+        image: docker.io/kumhn/sample-os4-image:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: app1
+          containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    name: app1
+---
