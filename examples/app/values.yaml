@@ -1,0 +1,16 @@
+cpx:
+  enabled: true
+  image: 'quay.io/citrix/citrix-k8s-cpx-ingress:13.0-64.35'
+  pullPolicy: IfNotPresent
+  serviceType:
+    nodePort:
+      enabled: true
+  cic:
+    required: true
+    image: 'quay.io/citrix/citrix-k8s-ingress-controller:1.11.3'
+    pullPolicy: IfNotPresent
+  license:
+    accept: 'Yes'
+  entityPrefix: k8s
+  logLevel: INFO
+  ingressClass: [medallia]

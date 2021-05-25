@@ -1,0 +1,16 @@
+kind: Ingress
+metadata:
+  name: app1-ingress
+  annotations:
+   kubernetes.io/ingress.class: "medallia"
+   ingress.citrix.com/insecure-port: "80"
+spec:
+  rules:
+  - host: citrix-medallia 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: app1
+          servicePort: 80
+~                        
