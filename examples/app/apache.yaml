@@ -17,10 +17,7 @@ spec:
     spec:
       containers:
       - name: app1
-        # image: in-docker-reg.eng.citrite.net/cpx-dev/web-test:latest
-#        image: httpd:2.4
-        #image: docker.io/kumhn/sample-app:eastdc
-        image: docker.io/kumhn/sample-os3-image
+        image: httpd:2.4
         imagePullPolicy: IfNotPresent
         ports:
         - name: app1
