@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubecon-demo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/pushkar-citrix/redhatdeveloper.git
+    targetRevision: HEAD
+    path: examples/app/kubecon/azure/
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+        - CreateNamespace=true
