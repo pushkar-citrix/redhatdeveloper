@@ -1,22 +1,58 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: kubecon-demo
-  namespace: argocd
+  name: demo-app
+  annotations:
+    kubernetes.io/ingress.class: "azure"
+    ingress.citrix.com/frontend-ip: "10.0.32.9"
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/pushkar-citrix/redhatdeveloper.git
-    targetRevision: HEAD
-    path: examples/app/kubecon/azure/
-    directory:
-      recurse: false
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: demo
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-        - CreateNamespace=true
+  rules:
+  - host: "demo.ocp-citrix.cloudpst.net"
+    http:
+      paths:
+      - backend:
+          service:
+            name: demo-app
+            port:
+              number: 5002
+        path: /
+        pathType: Prefix
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+  labels:
+    name: demo-app
+spec:
+  type: NodePort
+  ports:
+  - port: 5002
+    targetPort: 5002
+    nodePort: 30041
+  selector:
+    app: demo-app
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+  labels:
+    app: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - name: demo-app
+        image: bharthijivi/kubecon_azure:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5002
