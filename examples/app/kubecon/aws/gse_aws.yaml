@@ -1,0 +1,9 @@
+apiVersion: citrix.com/v1beta1
+kind: globalserviceentry
+metadata:
+  name: demo-app.default.useast.awscluster
+spec:
+  endpoint:
+    ipv4address: 44.199.125.121
+    monitorPort: 80
+

@@ -1,0 +1,9 @@
+apiVersion: citrix.com/v1beta1
+kind: globalserviceentry
+metadata:
+  name: demo-app.default.souteastasia.azurecluster
+spec:
+  endpoint:
+    ipv4address: 23.98.67.167
+    monitorPort: 80
+

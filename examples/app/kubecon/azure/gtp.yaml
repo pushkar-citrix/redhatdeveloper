@@ -1,0 +1,21 @@
+apiVersion: "citrix.com/v1beta1"
+kind: globaltrafficpolicy
+metadata:
+  name: demo-app
+spec:
+  serviceType: 'HTTP'
+  hosts:
+  - host: 'demo.ocp-citrix.cloudpst.net'
+    policy:
+      trafficPolicy: 'ROUNDROBIN'
+      targets:
+      - destination: 'demo-app.default.useast.awscluster'
+        weight: 50
+      - destination: 'demo-app.default.souteastasia.azurecluster'
+        weight: 50
+      monitor:
+      - monType: http
+        uri: ''
+        respCode: 200
+  status:
+      {}
